@@ -1,0 +1,16 @@
+# Déploiement de l'API sur Render (Blueprint) : New + > Blueprint > choisir le dépôt
+services:
+  - type: web
+    name: fraud-api
+    runtime: python
+    plan: free                      # passer à "starter" (7 $/mois) pour supprimer la mise en veille
+    buildCommand: pip install -r requirements-api.txt
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.3               # mis à jour par make_deploy.py
+      - key: ARTIFACTS_PATH
+        value: artifacts_api.joblib
+      - key: API_KEY
+        sync: false                 # à saisir dans le tableau de bord Render (optionnel mais recommandé)
